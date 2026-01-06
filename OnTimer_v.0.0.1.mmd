@@ -1,0 +1,87 @@
+%%{init: {'securityLevel': 'loose', 'flowchart': {'diagramPadding': 10, 'nodeSpacing': 50, 'rankSpacing': 90}}}%%
+graph TD
+
+    A24[24: OnTimer]:::timer
+    
+    subgraph pre ["🟢 Pre-Checks & Timing"]
+        A28[28: IsTradingTime]:::bool
+        A38[38: IsNewDay]:::bool
+    end
+
+    subgraph data ["🔵 Data Acquisition"]
+        A7[7: GetMarketDepthPrices]:::bool --> A36[36: WritePDToFile]:::bool
+        A29[29: ProcessReceiver]:::void --> A31[31: ReadPricesFromFile]:::bool --> A35[35: ProcessReceivedPrices]:::void
+        A30[30: ProcessSender]:::void --> A37[37: WritePricesToFile]:::void
+    end
+
+    subgraph logic ["🟠 Decision Logic"]
+        A2[2:CalculatePD_LongOpen_ShortClose]:::not_void
+        A3[3:CalculatePD_ShortOpen_LongClose]:::not_void
+        A5[5: CheckEntryConditions]:::void
+        A6[6: CheckExitConditions]:::void
+        A1[1: CanOpenPosition]:::bool
+        A4[4: CheckBookCondition]:::bool
+        A34[34:CheckOpenPositionsForLevel]:::bool
+    end
+
+    subgraph exec ["🔴 Execution"]
+        A18[18: OpenMegaPosition]:::void
+        A15[15: CloseMegaPosition]:::void
+        A33[33: WriteCommand]:::bool
+        A11[11: GetVolumeCoefficient]:::not_void
+    end
+
+    subgraph io ["📁 I/O & Commands"]
+        A30[30: ProcessSender]:::void
+        A37[37: WritePricesToFile]:::bool
+        A29[29: ProcessReceiver]:::void
+        A26[26: ProcessCommands]:::void
+        A32[32: ReadAllCommands]:::bool
+        A10[10: GetLogicalLevel]:::not_void
+        A27[27:ProcessCommandsByPriority]:::void
+        A25[25: ParseCommand]:::bool
+        A14[14: FileHasChanged]:::bool
+        A39[39: ClearCommandFile]:::bool
+        A13[13: ExecuteOpenCommand]:::void
+        A12[12: ExecuteCloseCommand]:::void
+    end
+
+
+
+    %% Main flow
+    A24 --> pre
+    A24 --> logic
+    A24 --> io
+
+    A24 --> A29 & A35 & A30
+    
+    A2 --> A7
+    A3 --> A7
+    
+    A35 --> A5 & A6
+    A5 --> A1 & A4 & A18
+    A6 --> A4 & A34 & A15
+    
+    A18 --> A11 & A10 & A33
+    A15 --> A33 & A10
+    
+    A29 -->  A35
+    A26 --> A14 & A32 & A27 & A39
+    A27 --> A10 & A25 & A13 & A12
+    
+    %% Optional: conditional skips
+    A28 -. "false" .-> A50[Skip Trading Steps]:::void
+    A38 -. "true" .-> A51[Reset Daily State]:::void
+
+   classDef timer fill:white,color:black,font-size:24px,stroke:#333
+    classDef pre   fill:#e3f2fd,color:#0d47a1,stroke:#1e88e5,stroke-width:1px
+    classDef data  fill:#e1f5fe,color:#01579b,stroke:#0288d1
+    classDef logic fill:#fff3e0,color:#e65100,stroke:#fb8c00
+    classDef exec  fill:#ffebee,color:#b71c1c,stroke:#e53935
+    classDef io    fill:#f3e5f5,color:#4a148c,stroke:#7b1fa2
+    classDef bool  fill:#E2EFDA,color:#2e7d32,stroke:#81c784
+    classDef void  fill:white,color:black,stroke:#9e9e9e
+
+    %% УДАЛИ ЭТИ 2 СТРОКИ (они ломают всё):
+    %% class exec Exetion
+    %% classDef Exetion fill:#FFF7E

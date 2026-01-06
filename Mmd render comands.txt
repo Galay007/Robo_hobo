@@ -1,0 +1,1 @@
+mmdc -i OnTimer_v.0.0.1.mmd -o diagram-2k.png --scale 24 --backgroundColor white

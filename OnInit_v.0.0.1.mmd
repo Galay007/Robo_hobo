@@ -1,0 +1,18 @@
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor':'#e3f2fd','primaryBorderColor':'#9575cd','lineColor':'#4a148c'}}}%%
+flowchart TD
+
+    A[20: OnInit] --> B[9: GetTimeLocal]
+    A --> C[21: ClearDataFiles]
+    A --> D[10: GetLogicalLevel]
+    A --> E[17: CreateFileHeader]
+
+    C --> F[22: ClearFile]
+
+    %% Стили для узлов
+    classDef init fill:white,color:black,font-size:24px,stroke:#333
+    classDef default fill:white,stroke:#9575cd
+    classDef not_void fill:#ECECFF,stroke:#9575cd
+
+    class A init
+    class C,E,F default
+    class B,D not_void

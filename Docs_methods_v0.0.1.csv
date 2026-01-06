@@ -1,0 +1,40 @@
+є;»м€ метода;ѕараметры;¬озвращает; то вызывает; акие методы вызывает; омментарий р€дом с методом
+1;CanOpenPosition;int levelIndex;bool;CheckEntryConditions (5);Ч;ѕроверка возможности открыти€ позиции
+2;CalculatePD_LongOpen_ShortClose;Ч;double;OnTimer (24);GetMarketDepthPrices (7);–асчет PD дл€ открыти€ длинной и закрыти€ короткой мегапозиции
+3;CalculatePD_ShortOpen_LongClose;Ч;double;OnTimer (24);GetMarketDepthPrices (7);–асчет PD дл€ открыти€ короткой и закрыти€ длинной мегапозиции
+4;CheckBookCondition;bool isLongMega;bool;CheckEntryConditions (5);Ч;ѕроверка услови€ полноты стаканов
+5;CheckEntryConditions;double currentPD_ShortOpen_LongClose, double currentPD_LongOpen_ShortClose;void;OnTimer (24);CanOpenPosition (1), CheckBookCondition (4), GetLogicalLevel (10), OpenMegaPosition (18);ѕроверка условий входа (ћќƒ»‘»÷»–ќ¬јЌЌјя - нахождение в зоне)
+6;CheckExitConditions;double currentPD_ShortOpen_LongClose, double currentPD_LongOpen_ShortClose;void;OnTimer (24);CheckBookCondition (4), GetLogicalLevel (10), CloseMegaPosition (15), CheckOpenPositionsForLevel (34);ћодифицированна€ функци€ проверки условий выхода
+7;GetMarketDepthPrices;string symbol, double &depth_bid, double &depth_ask;bool;CalculatePD_LongOpen_ShortClose (2), CalculatePD_ShortOpen_LongClose (3);Ч;Ч
+8;GetMaxPositionsForLevel;int levelIndex;int;;Ч;ѕолучение максимального количества позиций дл€ уровн€
+9;GetTimeLocal;void;datetime;OnInit (20);Ч;—лужебна€ функци€ получени€ локального времени
+10;GetLogicalLevel;int arrayIndex;int;CheckEntryConditions (5), CheckExitConditions (6), ExecuteCloseCommand (12), ExecuteOpenCommand (13), CloseMegaPosition (15), CloseAllPositionsOnLevel (16), OpenMegaPosition (18), OnInit (20), ProcessCommandsByPriority (27);Ч;‘ункци€ получени€ логического номера уровн€ из индекса массива
+11;GetVolumeCoefficient;int levelIndex;double;OpenMegaPosition (18);Ч;ѕолучение корректирующего коэффициента объема
+12;ExecuteCloseCommand;int level;void;ProcessCommandsByPriority (27);GetLogicalLevel (10);¬ыполнение команды CLOSE
+13;ExecuteOpenCommand;double volume, double takeProfit, double stopLoss, string direction, int level;void;ProcessCommandsByPriority (27);GetLogicalLevel (10);¬ыполнение команды OPEN (»—ѕ–ј¬Ћ≈ЌЌјя)
+14;FileHasChanged;string filename;bool;ProcessCommands (26);Ч;ѕроверка изменени€ файла (оптимизаци€)
+15;CloseMegaPosition;int levelIndex, double currentPD;void;CheckExitConditions (6);GetLogicalLevel (10), WriteCommand (33), CloseAllPositionsOnLevel (37);«акрытие ¬—≈’ позиций мегапозиции уровн€ (»—ѕ–ј¬Ћ≈ЌЌјя)
+16;CloseAllPositionsOnLevel;int levelIndex;void;;GetLogicalLevel (10);«акрытие ¬—≈’ позиций уровн€ по magic number (»—ѕ–ј¬Ћ≈ЌЌјя)
+17;CreateFileHeader;Ч;bool;OnInit (20);Ч;—оздание заголовка файла (»—ѕ–ј¬Ћ≈ЌЌјя ¬≈–—»я)
+18;OpenMegaPosition;int levelIndex, double currentPD;void;CheckEntryConditions (5); GetLogicalLevel (10), GetVolumeCoefficient (11), WriteCommand (33);ћодифицированна€ функци€ открыти€ мегапозиции (»—ѕ–ј¬Ћ≈ЌЌјя)
+19;OnDeinit;const int reason;void;;Ч;Expert deinitialization function
+20;OnInit;Ч;int;;GetTimeLocal (9), GetLogicalLevel (10), CreateFileHeader (17), ClearDataFiles (21);Expert initialization function
+21;ClearDataFiles;Ч;void;OnInit (20);ClearFile (22);ќчистка файлов данных при запуске
+22;ClearFile;string filename, bool is_common;void;ClearDataFiles (21);Ч;ќчистка конкретного файла
+23;OnTick;Ч;void;;Ч;Expert tick function
+24;OnTimer;Ч;void;;CalculatePD_LongOpen_ShortClose (2), CalculatePD_ShortOpen_LongClose (3), CheckEntryConditions (5), CheckExitConditions (6), ProcessCommands (26), IsTradingTime (28), ProcessReceiver (29), ProcessSender (30),  WritePDToFile (36), IsNewDay (38) ;ƒополнительна€ оптимизаци€ OnTimer
+25;ParseCommand;string line, string &command, double &volume, double &takeProfit, double &stopLoss, string &direction, int &level, int &commandId;bool;ProcessCommandsByPriority (27);Ч;ѕарсинг команды из строки
+26;ProcessCommands;Ч;void;OnTimer (24);FileHasChanged (14), ProcessCommandsByPriority (27), ReadAllCommands (32), ClearCommandFile (39);ќптимизированна€ проверка команд с кешированием
+27;ProcessCommandsByPriority;string &commands[];void;ProcessCommands (26);GetLogicalLevel (10), ExecuteCloseCommand (12), ExecuteOpenCommand (13), ParseCommand (25);ќбработка команд с приоритетом
+28;IsTradingTime;Ч;bool;OnTimer (24);Ч;ѕроверка торгового времени
+29;ProcessReceiver;Ч;void;OnTimer (24);ReadPricesFromFile (31), ProcessReceivedPrices (35);ћодифицированна€ функци€ ProcessReceiver
+30;ProcessSender;Ч;void;OnTimer (24);WritePricesToFile (37);‘ункци€ обработки дл€ отправител€
+31;ReadPricesFromFile;double &bid, double &ask, datetime &tick_time;bool;ProcessReceiver (29);Ч;”лучшенное чтение цен (только последн€€ строка)
+32;ReadAllCommands;string &commands[];bool;ProcessCommands (26);Ч;”лучшенное чтение команд с защитой от блокировки
+33;WriteCommand;string command, double volume, double takeProfit, double stopLoss, string direction, int level, int commandId = 0;bool;CloseMegaPosition (15), OpenMegaPosition (18);Ч;”лучшенна€ запись команды с немедленным сбросом буфера
+34;CheckOpenPositionsForLevel;int levelIndex;bool;CheckExitConditions (6);Ч;ѕроверка наличи€ открытых позиций дл€ уровн€
+35;ProcessReceivedPrices;double bid, double ask, datetime tick_time;void;OnTimer (24), ProcessReceiver (29);Ч;ќбработка полученных цен (можно расширить)
+36;WritePDToFile;double pd_short, double pd_long;bool;;Ч;‘”Ќ ÷»я «јѕ»—» PD ¬ ‘ј…Ћ (ћодифицированна€ с очисткой в новые сутки)
+37;WritePricesToFile;double bid, double ask;bool;CloseMegaPosition (15), ProcessSender (30);Ч;”лучшенна€ запись цен с немедленным сбросом
+38;IsNewDay;Ч;bool;OnTimer (24);Ч;ѕроверка, наступил ли новый день
+39;ClearCommandFile;Ч;bool;ProcessCommands (26), ProcessCommandsByPriority (27);Ч;ќчистка файла команд
