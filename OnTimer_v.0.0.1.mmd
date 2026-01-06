@@ -1,4 +1,4 @@
-%%{init: {'flowchart': {'diagramPadding': 10, 'nodeSpacing': 50, 'rankSpacing': 60}}}%%
+%%{init: {'flowchart': {'diagramPadding': 30, 'nodeSpacing': 10, 'rankSpacing': 150}}}%%
 graph TD
 
     A24[24: OnTimer]:::timer
@@ -15,13 +15,13 @@ graph TD
     end
 
     subgraph logic ["🟠 Decision Logic"]
-        A2[2: CalculatePD_<br/>_LongOpen_ShortClose]:::not_void
-        A3[3: CalculatePD_<br/>_ShortOpen_LongClose]:::not_void
+        A2[2:CalculatePD_LongOpen_ShortClose]:::not_void
+        A3[3:CalculatePD_ShortOpen_LongClose]:::not_void
         A5[5: CheckEntryConditions]:::void
         A6[6: CheckExitConditions]:::void
         A1[1: CanOpenPosition]:::bool
         A4[4: CheckBookCondition]:::bool
-        A34[34: CheckOpen<br/>PositionsForLevel]:::bool
+        A34[34:CheckOpenPositionsForLevel]:::bool
     end
 
     subgraph exec ["🔴 Execution"]
@@ -38,7 +38,7 @@ graph TD
         A26[26: ProcessCommands]:::void
         A32[32: ReadAllCommands]:::bool
         A10[10: GetLogicalLevel]:::not_void
-        A27[27:ProcessCommandsByPriority]:::void
+        A27[27: ProcessCommandsByPriority]:::void
         A25[25: ParseCommand]:::bool
         A14[14: FileHasChanged]:::bool
         A39[39: ClearCommandFile]:::bool
@@ -53,17 +53,20 @@ graph TD
     A24 --> logic
     A24 --> io
 
-    A24 --> A29 & A35 & A30
+    A24 --> A29 & A36 & A30
     
     A2 --> A7
     A3 --> A7
     
-    A35 --> A5 & A6
-    A5 --> A1 & A4 & A18
-    A6 --> A4 & A34 & A15
+    A5 --> A1 & A4 & A18 & A10
+    A6 --> A4 & A34 & A15 & A10
     
     A18 --> A11 & A10 & A33
-    A15 --> A33 & A10
+    A15 --> A33 & A10 & A37
+
+    A12 --> A10
+
+    A13 --> A10
     
     A29 -->  A35
     A26 --> A14 & A32 & A27 & A39
