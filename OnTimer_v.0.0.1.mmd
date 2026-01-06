@@ -15,13 +15,13 @@ graph TD
     end
 
     subgraph logic ["🟠 Decision Logic"]
-        A2[2:CalculatePD_LongOpen_ShortClose]:::not_void
-        A3[3:CalculatePD_ShortOpen_LongClose]:::not_void
+        A2[2: CalculatePD_<br>_LongOpen_ShortClose]:::not_void
+        A3[3: CalculatePD_<br>_ShortOpen_LongClose]:::not_void
         A5[5: CheckEntryConditions]:::void
         A6[6: CheckExitConditions]:::void
         A1[1: CanOpenPosition]:::bool
         A4[4: CheckBookCondition]:::bool
-        A34[34:CheckOpenPositionsForLevel]:::bool
+        A34[34: CheckOpen<br>PositionsForLevel]:::bool
     end
 
     subgraph exec ["🔴 Execution"]
